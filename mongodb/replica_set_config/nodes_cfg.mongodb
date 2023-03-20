@@ -22,8 +22,27 @@ var config = {
 
 try {
     rs.initiate(config, { force: true })
-} catch(e) {
+    print('initiate successfully')
+} catch (e) {
     print('already initiated')
 }
 
-rs.status()
+sleep(5 * 1000)
+
+use('admin')
+
+for (let i = 0; i < 3; i++) {
+    try {
+        db.createUser({
+            user: "tom-rs",
+            pwd: "jerry",
+            roles: ["root"]
+        })
+        print('Create user successfully')
+        break
+    } catch (e) {
+        print('Create user failed', JSON.stringify(e))
+        print('retrying')
+        sleep(3 * 1000)
+    }
+}
