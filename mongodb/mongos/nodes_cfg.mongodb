@@ -3,3 +3,5 @@ use('admin')
 db.auth('tom-mongos', 'jerry')
 
 sh.addShard( "rs0/mongo1:27017,mongo2:27017,mongo3:27017")
+
+print('Done')

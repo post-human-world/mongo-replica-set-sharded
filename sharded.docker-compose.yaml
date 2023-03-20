@@ -16,7 +16,6 @@ services:
       - mongo2
       - mongo3
     restart: always
-    # enable file permission
     entrypoint: [ "bash", "/config/entrypoint.sh" ]
     deploy:
       restart_policy:

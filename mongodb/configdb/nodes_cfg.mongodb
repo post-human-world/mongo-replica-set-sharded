@@ -18,18 +18,23 @@ use('admin')
 
 // mongos and configdb use same user system, but rs0 did not
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 7; i++) {
     try {
         db.createUser({
-            user: "tom-mongos",
-            pwd: "jerry",
+            user: 'tom-mongos',
+            pwd: 'jerry',
             roles: ["root"]
         })
-        db.auth('tom-mongos', 'jerry')
+        print('Create user successfully')
         break
     } catch (e) {
-        print('Create user failed', JSON.stringify(e))
-        print('retrying')
-        sleep(3 * 1000)
+        print(JSON.stringify(e))
+        if (e.codeName == 'NotWritablePrimary') {
+            print('Create user failed, because this node does not become primary. Retrying.......')
+            sleep(3 * 1000)
+            continue
+        }
+        print('Create user failed, do it manually')
+        break
     }
 }
