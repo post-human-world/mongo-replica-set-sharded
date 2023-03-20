@@ -1,0 +1,10 @@
+rs.initiate(
+  {
+    _id: "configdb",
+    configsvr: true,
+    members: [
+      { _id : 0, host : "configdb1:27017" },
+      { _id : 1, host : "configdb2:27017" },
+    ]
+  }
+)
