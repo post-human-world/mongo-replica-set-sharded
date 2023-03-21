@@ -1,20 +1,17 @@
 version: '3.8'
 name: replica-set
 services:
-  mongo1:
-    container_name: mongo1
+  sh0-mongo1:
+    container_name: sh0-mongo1
     image: mongo:6.0.5
     volumes:
-      - ./mongodb/keys/:/keys
-      - ./mongodb/replica_set_config/:/config/
-      - ./mongodb/data/rs1/:/data/
+      - ./mongodb/keys/:/keys/
+      - ./mongodb/replica_set/sh0/:/config/
+      - ./mongodb/data/sh0/rs1/:/data/
     networks:
       - mongors-network
     ports:
       - 27021:27017
-    links:
-      - mongo2
-      - mongo3
     restart: always
     entrypoint: [ "bash", "/config/entrypoint.sh" ]
     deploy:
@@ -24,13 +21,13 @@ services:
         max_attempts: 5
         window: 60s
 
-  mongo2:
-    container_name: mongo2
+  sh0-mongo2:
+    container_name: sh0-mongo2
     image: mongo:6.0.5
     volumes:
-      - ./mongodb/keys/:/keys
-      - ./mongodb/replica_set_config/:/config
-      - ./mongodb/data/rs2/:/data
+      - ./mongodb/keys/:/keys/
+      - ./mongodb/replica_set/sh0/:/config/
+      - ./mongodb/data/sh0/rs2/:/data/
     networks:
       - mongors-network
     ports:
@@ -44,13 +41,13 @@ services:
         max_attempts: 5
         window: 60s
 
-  mongo3:
-    container_name: mongo3
+  sh0-mongo3:
+    container_name: sh0-mongo3
     image: mongo:6.0.5
     volumes:
-      - ./mongodb/keys/:/keys
-      - ./mongodb/replica_set_config/:/config
-      - ./mongodb/data/rs3/:/data
+      - ./mongodb/keys/:/keys/
+      - ./mongodb/replica_set/sh0/:/config/
+      - ./mongodb/data/sh0/rs3/:/data/
     networks:
       - mongors-network
     ports:
@@ -64,13 +61,73 @@ services:
         max_attempts: 5
         window: 60s
 
+  sh1-mongo1:
+    container_name: sh1-mongo1
+    image: mongo:6.0.5
+    volumes:
+      - ./mongodb/keys/:/keys/
+      - ./mongodb/replica_set/sh1/:/config/
+      - ./mongodb/data/sh1/rs1/:/data/
+    networks:
+      - mongors-network
+    ports:
+      - 27024:27017
+    restart: always
+    entrypoint: [ "bash", "/config/entrypoint.sh" ]
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
+
+  sh1-mongo2:
+    container_name: sh1-mongo2
+    image: mongo:6.0.5
+    volumes:
+      - ./mongodb/keys/:/keys/
+      - ./mongodb/replica_set/sh1/:/config/
+      - ./mongodb/data/sh1/rs2/:/data/
+    networks:
+      - mongors-network
+    ports:
+      - 27025:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--config", "/config/mongod.cfg" ]
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
+
+  sh1-mongo3:
+    container_name: sh1-mongo3
+    image: mongo:6.0.5
+    volumes:
+      - ./mongodb/keys/:/keys/
+      - ./mongodb/replica_set/sh1/:/config/
+      - ./mongodb/data/sh1/rs3/:/data/
+    networks:
+      - mongors-network
+    ports:
+      - 27026:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--config", "/config/mongod.cfg" ]
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
+
   configdb1:
     container_name: configdb1
     image: mongo:6.0.5
     volumes:
-      - ./mongodb/keys/:/keys
-      - ./mongodb/configdb/:/config
-      - ./mongodb/data/configdb/:/data
+      - ./mongodb/keys/:/keys/
+      - ./mongodb/configdb/:/config/
+      - ./mongodb/data/configdb/:/data/
     networks:
       - mongors-network
     ports:
@@ -88,9 +145,9 @@ services:
     container_name: configdb2
     image: mongo:6.0.5
     volumes:
-      - ./mongodb/keys/:/keys
-      - ./mongodb/configdb/:/config
-      - ./mongodb/data/configdb2/:/data
+      - ./mongodb/keys/:/keys/
+      - ./mongodb/configdb/:/config/
+      - ./mongodb/data/configdb2/:/data/
     networks:
       - mongors-network
     ports:
@@ -108,9 +165,9 @@ services:
     container_name: mongos
     image: mongo:6.0.5
     volumes:
-      - ./mongodb/keys/:/keys
-      - ./mongodb/mongos/:/config
-      - ./mongodb/data/mongos/:/data
+      - ./mongodb/keys/:/keys/
+      - ./mongodb/mongos/:/config/
+      - ./mongodb/data/mongos/:/data/
     networks:
       - mongors-network
     ports:

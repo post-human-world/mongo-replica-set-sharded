@@ -1,7 +1,10 @@
 use('admin')
 
-db.auth('tom-mongos', 'jerry')
-
-sh.addShard( "rs0/mongo1:27017,mongo2:27017,mongo3:27017")
-
-print('Done')
+try {
+    db.auth('tom-mongos', 'jerry')
+    sh.addShard( "sh0/sh0-mongo1:27017,sh0-mongo2:27017,sh0-mongo3:27017")
+    sh.addShard( "sh1/sh1-mongo1:27017,sh1-mongo2:27017,sh1-mongo3:27017")
+    print('Done')
+} catch (e) {
+    print('Something happened when adding shards: ' + JSON.stringify(e))
+}

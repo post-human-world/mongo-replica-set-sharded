@@ -1,14 +1,27 @@
-try {
-    rs.initiate(
+var config = {
+    "_id": "sh1",
+    "version": 1,
+    "members": [
         {
-            _id: "configdb",
-            configsvr: true,
-            members: [
-                { _id: 0, host: "configdb1:27017" },
-                { _id: 1, host: "configdb2:27017" },
-            ]
+            "_id": 1,
+            "host": "sh1-mongo1:27017",
+            "priority": 7
+        },
+        {
+            "_id": 2,
+            "host": "sh1-mongo2:27017",
+            "priority": 2
+        },
+        {
+            "_id": 3,
+            "host": "sh1-mongo3:27017",
+            "priority": 1
         }
-    )
+    ]
+}
+
+try {
+    rs.initiate(config, { force: true })
     print('initiate successfully')
 } catch (e) {
     print('initiated failed: ' + JSON.stringify(e))
@@ -16,12 +29,10 @@ try {
 
 use('admin')
 
-// mongos and configdb use same user system, but rs0 did not
-
 for (let i = 0; i < 7; i++) {
     try {
         db.createUser({
-            user: 'tom-mongos',
+            user: 'tom-sh1',
             pwd: 'jerry',
             roles: ["root"]
         })
